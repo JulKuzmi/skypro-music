@@ -1,4 +1,4 @@
-export function AudioPlayer() {
+export const AudioPlayer = () => {
   return (
     <div className="bar">
       <div className="bar__content">
@@ -42,12 +42,12 @@ export function AudioPlayer() {
                 </div>
                 <div className="track-play__author">
                   <a className="track-play__author-link" href="http://">
-                    Ты та...
+                    I'm Fire
                   </a>
                 </div>
                 <div className="track-play__album">
                   <a className="track-play__album-link" href="http://">
-                    Баста
+                    Ali Bakgor
                   </a>
                 </div>
               </div>
@@ -86,4 +86,4 @@ export function AudioPlayer() {
       </div>
     </div>
   );
-}
+};

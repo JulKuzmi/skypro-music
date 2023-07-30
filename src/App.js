@@ -1,7 +1,9 @@
 import "./App.css";
 import { AudioPlayer } from "./components/audioPlayer";
 import { Nav } from "./components/navMenu";
+// import { SideBar } from "./components/sideBar";
 import { TrackList } from "./components/trackList";
+
 function App() {
   return (
     <body>
@@ -10,6 +12,7 @@ function App() {
           <main className="main">
             <Nav />
             <TrackList />
+            {/* <SideBar /> */}
             <AudioPlayer />
           </main>
           <footer className="footer"></footer>
