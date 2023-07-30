@@ -3,7 +3,6 @@ import { AudioPlayer } from "./components/audioPlayer";
 import { Nav } from "./components/navMenu";
 import { Sidebar } from "./components/sideBar";
 import { TrackList } from "./components/trackList";
-import { Songs } from "./components/songs/songs";
 
 function App() {
   return (
@@ -13,7 +12,7 @@ function App() {
           <main className="main">
             <Nav />
             <TrackList />
-            <Songs />
+
             <Sidebar />
             <AudioPlayer />
           </main>
