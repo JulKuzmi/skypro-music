@@ -1,13 +1,17 @@
 import "./App.css";
-
+import { AudioPlayer } from "./components/audioPlayer";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Здесь скоро будет Skypro.Music</p>
-      </header>
-    </div>
+    <body>
+      <div className="wrapper">
+        <div className="container">
+          <main className="main">
+            <AudioPlayer />
+          </main>
+          <footer className="footer"></footer>
+        </div>
+      </div>
+    </body>
   );
 }
-
 export default App;
