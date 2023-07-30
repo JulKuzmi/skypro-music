@@ -1,8 +1,9 @@
 import "./App.css";
 import { AudioPlayer } from "./components/audioPlayer";
 import { Nav } from "./components/navMenu";
-// import { SideBar } from "./components/sideBar";
+import { Sidebar } from "./components/sideBar";
 import { TrackList } from "./components/trackList";
+import { Songs } from "./components/songs/songs";
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
           <main className="main">
             <Nav />
             <TrackList />
-            {/* <SideBar /> */}
+            <Songs />
+            <Sidebar />
             <AudioPlayer />
           </main>
           <footer className="footer"></footer>
