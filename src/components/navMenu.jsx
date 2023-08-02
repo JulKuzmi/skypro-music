@@ -1,4 +1,4 @@
-export const Nav = () => {
+export function Nav() {
   return (
     <nav className="main__nav nav">
       <div className="nav__logo logo">
@@ -30,4 +30,4 @@ export const Nav = () => {
       </div>
     </nav>
   );
-};
+}
