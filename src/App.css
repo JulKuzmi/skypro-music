@@ -118,8 +118,8 @@ body {
 }
 
 .main__sidebar {
-  max-width: 418px;
-  padding: 20px 90px 20px 78px;
+  max-width: 350px;
+  padding: 20px 100px 30px 78px;
 }
 
 .nav__logo {
@@ -355,15 +355,15 @@ body {
 }
 
 .col01 {
-  width: 447px;
+  width: 350px;
 }
 
 .col02 {
-  width: 321px;
+  width: 200px;
 }
 
 .col03 {
-  width: 245px;
+  width: 220px;
 }
 
 .col04 {
@@ -394,17 +394,10 @@ body {
 }
 
 .track__title {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  width: 447px;
+  width: 200px;
 }
 
 .track__title-image {
@@ -412,14 +405,8 @@ body {
   height: 51px;
   padding: 16px;
   background: #313131;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
   margin-right: 17px;
 }
@@ -448,12 +435,8 @@ body {
 }
 
 .track__author {
-  width: 321px;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  width: 150px;
   display: flex;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 
@@ -467,7 +450,7 @@ body {
 }
 
 .track__album {
-  width: 245px;
+  width: 150px;
 }
 
 .track__album-link {
