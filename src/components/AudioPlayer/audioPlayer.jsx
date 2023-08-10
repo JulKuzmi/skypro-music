@@ -43,12 +43,12 @@ export function AudioPlayer() {
                 </S.TrackPlayImage>
                 <S.TrackPlayAuthor>
                   <S.TrackPlayAuthorLink href="http://">
-                    Ты та...
+                    How Deep Is Your Love
                   </S.TrackPlayAuthorLink>
                 </S.TrackPlayAuthor>
                 <S.TrackPlayAlbum>
                   <S.TrackPlayAlbumLink href="http://">
-                    Баста
+                    Calvin Harris..
                   </S.TrackPlayAlbumLink>
                 </S.TrackPlayAlbum>
               </S.TrackPlayContain>

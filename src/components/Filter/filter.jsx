@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as S from "./filter.style";
 
 export function Filter() {
   const toggleFilter = (filter) => {
@@ -16,77 +17,62 @@ export function Filter() {
   const typeMusicOnGenre = ["Рок", "Хип-Хоп", "Поп-Музыка", "Техно", "Инди"];
 
   const author = typeMusicOnAuthor.map((text, index) => {
-    return (
-      <li className="text-wrap" key={index}>
-        {text}
-      </li>
-    );
+    return <S.TextWrap key={index}>{text}</S.TextWrap>;
   });
   const genre = typeMusicOnGenre.map((text, index) => {
-    return (
-      <li className="text-wrap" key={index}>
-        {text}
-      </li>
-    );
+    return <S.TextWrap key={index}>{text}</S.TextWrap>;
   });
-
   return (
-    <div className="centerblock__filter filter">
-      <div className="filter__title">Искать по:</div>
+    <S.CenterblockFilter>
+      <S.FilterTitle>Искать по:</S.FilterTitle>
       <div>
-        <ul
-          className={
-            openFilter === "author"
-              ? "filter__button button-author _btn-text active"
-              : "filter__button button-author _btn-text"
-          }
+        <S.FilterButton
+          $active={openFilter === "author" ? "active" : "notActive"}
           onClick={() => toggleFilter("author")}
         >
           исполнителю
-        </ul>
-        <div className="filter-wrap">{openFilter === "author" && author}</div>
+        </S.FilterButton>
+        <S.FilterWrap>{openFilter === "author" && author}</S.FilterWrap>
       </div>
       <div>
-        <ul
-          className={
-            openFilter === "year"
-              ? "filter__button button-year _btn-text active"
-              : "filter__button button-year _btn-text"
-          }
+        <S.FilterButton
+          $active={openFilter === "year" ? "active" : "notActive"}
           onClick={() => toggleFilter("year")}
         >
           году
-        </ul>
+        </S.FilterButton>
         {openFilter === "year" && (
-          <div className="filter-radio">
+          <S.FilterRadio>
             <li>
-              <input id="radio1" type="radio" name="radio" value="0" />
-              <label className="label" htmlFor="radio1">
-                Более новые
-              </label>
+              <S.FilterRadioButton
+                id="radio1"
+                type="radio"
+                name="radio"
+                value="0"
+              />
+              <S.Label htmlFor="radio1">Более новые</S.Label>
             </li>
             <li>
-              <input id="radio2" type="radio" name="radio" value="1" />
-              <label className="label" htmlFor="radio2">
-                Более старые
-              </label>
+              <S.FilterRadioButton
+                id="radio2"
+                type="radio"
+                name="radio"
+                value="1"
+              />
+              <S.Label htmlFor="radio2">Более старые</S.Label>
             </li>
-          </div>
+          </S.FilterRadio>
         )}
       </div>
       <div>
-        <ul
-          className={
-            openFilter === "genre"
-              ? "filter__button button-genre _btn-text active"
-              : "filter__button button-genre _btn-text"
-          }
+        <S.FilterButton
+          $active={openFilter === "genre" ? "active" : "notActive"}
           onClick={() => toggleFilter("genre")}
         >
           жанру
-        </ul>
-        <div className="filter-wrap">{openFilter === "genre" && genre}</div>
+        </S.FilterButton>
+        <S.FilterWrap>{openFilter === "genre" && genre}</S.FilterWrap>
       </div>
-    </div>
+    </S.CenterblockFilter>
   );
 }
