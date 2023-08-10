@@ -1,4 +1,4 @@
-import styled, { AddGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 export const Wrapper = styled.div`
   width: 100%;
   min-height: 100%;
@@ -25,7 +25,7 @@ export const Main = styled.main`
   justify-content: space-between;
 `;
 
-export const GlobalStyle = AddGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
 * {
     margin: 0;
     padding: 0;
