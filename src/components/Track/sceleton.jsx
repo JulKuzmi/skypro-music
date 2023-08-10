@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton";
-import { playlist } from "./playlist";
+import { playlist } from "../playlist";
 export const SceletonCard = () => {
   return (
     <div className="playlist__item">

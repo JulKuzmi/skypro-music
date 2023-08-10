@@ -1,7 +1,7 @@
-import { Track } from "./track";
+import { Track } from "../Track/track";
 import { useEffect, useState } from "react";
-import { SceletonCard } from "./sceleton";
-import { Filter } from "./filter";
+import { SceletonCard } from "../Track/sceleton";
+import { Filter } from "../Filter/filter";
 export function TrackList() {
   const [isLoading, setLoading] = useState([]);
   const [songs, setPosts] = useState(false);

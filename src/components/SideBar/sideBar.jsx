@@ -1,6 +1,6 @@
-import { BarItem } from "./barItem";
+import { BarItem } from "../Bar/barItem";
 import { useEffect, useState } from "react";
-import { SkeletonItem } from "./sceleton";
+import { SkeletonItem } from "../Track/sceleton";
 export function SideBar() {
   const [isLoading, setLoading] = useState(true);
   const [songs, setPosts] = useState(false);

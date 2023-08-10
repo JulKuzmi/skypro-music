@@ -1,4 +1,4 @@
-import { playlist } from "./playlist";
+import { playlist } from "../playlist";
 
 export const BarItem = () => {
   return playlist.map((play, index) => {
