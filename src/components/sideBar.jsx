@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { BarItem } from "./barItem";
 import { useEffect, useState } from "react";
 import { SkeletonItem } from "./sceleton";
 export function SideBar() {
-  const [isLoading, setLoading] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const [songs, setPosts] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -12,7 +11,7 @@ export function SideBar() {
       setLoading(false);
     }, 5000);
     return () => clearTimeout(time);
-  }, []);
+  }, [songs]);
   return (
     <div className="main__sidebar sidebar">
       <div className="sidebar__personal">
