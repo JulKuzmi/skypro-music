@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Track } from "./track";
 import { useEffect, useState } from "react";
 import { SceletonCard } from "./sceleton";
@@ -13,7 +12,7 @@ export function TrackList() {
       setLoading(false);
     }, 5000);
     return () => clearTimeout(time);
-  }, []);
+  }, [songs]);
   return (
     <div className="main__centerblock centerblock">
       <div className="centerblock__search search">
