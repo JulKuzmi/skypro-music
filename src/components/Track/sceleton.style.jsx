@@ -31,7 +31,7 @@ export const TrackTitle = styled.div`
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 375px;
+  width: 447px;
 `;
 export const TrackTitleImage = styled.div`
   width: 51px;
