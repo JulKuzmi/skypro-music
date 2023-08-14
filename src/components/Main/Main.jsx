@@ -4,7 +4,7 @@ import { TrackList } from "../TrackList/trackList";
 import { AudioPlayer } from "../AudioPlayer/audioPlayer";
 import * as S from "./App.style";
 
-function App() {
+export const Main = () => {
   return (
     <body>
       <S.GlobalStyle />
@@ -21,5 +21,4 @@ function App() {
       </S.Wrapper>
     </body>
   );
-}
-export default App;
+};
