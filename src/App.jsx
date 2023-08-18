@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as S from "./components/Main/App.style";
 import { Login } from "./pages/login";
 import { AppRoutes } from "./routes";
@@ -8,7 +8,21 @@ function App() {
   const [user, setUser] = useState(null);
   const handleLogin = () => setUser({ login: "token" });
   const handleLogOut = () => setUser(null);
-  getPlaylist();
+  const [isLoading, setLoading] = useState(true);
+  const [tracks, setPosts] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  useEffect(() => {
+    getPlaylist()
+      .then((tracks) => {
+        console.log(tracks);
+        setPosts(tracks);
+      })
+      .catch((error) => alert(error))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <body>
       <S.GlobalStyle />
@@ -18,7 +32,13 @@ function App() {
             user={user}
             onAuthButtonClick={user ? handleLogOut : handleLogin}
           />
-          <AppRoutes user={user} />
+          <AppRoutes
+            user={user}
+            isLoading={isLoading}
+            tracks={tracks}
+            currentTrack={currentTrack}
+            setCurrentTrack={setCurrentTrack}
+          />
           <footer></footer>
         </S.Container>
       </S.Wrapper>

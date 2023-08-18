@@ -7,13 +7,33 @@ import { NotFound } from "./pages/notFound";
 import { MyPlaylist } from "./pages/myPlaylist";
 import { Collection } from "./pages/collection";
 
-export const AppRoutes = ({ user }) => {
+export const AppRoutes = ({
+  user,
+  isLoading,
+  tracks,
+  isOpen,
+  setIsOpen,
+  currentTrack,
+  setCurrentTrack,
+}) => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
       <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
-        <Route path="/main" element={<Main />} />
+        <Route
+          path="/main"
+          element={
+            <Main
+              isLoading={isLoading}
+              tracks={tracks}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              currentTrack={currentTrack}
+              setCurrentTrack={setCurrentTrack}
+            />
+          }
+        />
         <Route path="/myplaylist" element={<MyPlaylist />} />
         <Route path="/collection/:id" element={<Collection />} />
       </Route>
