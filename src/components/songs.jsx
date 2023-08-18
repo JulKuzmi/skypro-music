@@ -1,23 +1,27 @@
 export const songs = [
   {
+    id: "001",
     name: "Guilt",
     author: "Nero",
     album: "Welcome Reality",
     time: "4:44",
   },
   {
+    id: "002",
     name: "Elektro",
     author: "Dynoro, Outwork, Mr. Gee",
     album: "Elektro",
     time: "2:22",
   },
   {
+    id: "003",
     name: "I’m Fire",
     author: "Ali Bakgor",
     album: "I’m Fire",
     time: "2:22",
   },
   {
+    id: "004",
     name: "Non Stop",
     add: "(Remix)",
     author: "Стоункат, Psychopath",
@@ -25,6 +29,7 @@ export const songs = [
     time: "4:12",
   },
   {
+    id: "005",
     name: "Run Run",
     add: "(feat. AR/CO)",
     author: "Jaded, Will Clarke, AR/CO",
@@ -32,6 +37,7 @@ export const songs = [
     time: "2:54",
   },
   {
+    id: "006",
     name: "Eyes on Fire",
     add: "(Zeds Dead Remix)",
     author: "Blue Foundation, Zeds Dead",
@@ -39,6 +45,7 @@ export const songs = [
     time: "5:20",
   },
   {
+    id: "007",
     name: "Mucho Bien",
     add: "(Hi Profile Remix)",
     author: "HYBIT, Mr. Black, Offer Nissim, Hi Profile",
@@ -46,6 +53,7 @@ export const songs = [
     time: "3:41",
   },
   {
+    id: "008",
     name: "Knives n Cherries",
     add: "",
     author: "minthaze",
@@ -53,6 +61,7 @@ export const songs = [
     time: "1:48",
   },
   {
+    id: "009",
     name: "How Deep Is Your Love",
     add: "",
     author: "Calvin Harris, Disciples",
@@ -60,6 +69,7 @@ export const songs = [
     time: "3:32",
   },
   {
+    id: "010",
     name: "Morena",
     add: "",
     author: "Tom Boxer",

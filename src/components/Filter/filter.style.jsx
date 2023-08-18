@@ -8,6 +8,7 @@ export const TextWrap = styled.li`
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
+
   &:hover {
     color: #b672ff;
     font-variant-numeric: lining-nums proportional-nums;
@@ -56,6 +57,7 @@ export const FilterButton = styled.ul`
   padding: 6px 20px;
   background-color: #181818;
   color: white;
+
   &:hover {
     border-color: #d9b6ff;
     color: #d9b6ff;

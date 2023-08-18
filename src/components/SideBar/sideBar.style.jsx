@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const MainSideBar = styled.div`
-  max-width: 150px;
-  padding: 20px 100px 30px 78px;
+  max-width: 418px;
+  padding: 20px 90px 20px 78px;
 `;
 export const SideBarPersonal = styled.div`
   display: -webkit-box;
