@@ -4,7 +4,7 @@ export const Registration = () => {
   return (
     <S.registration>
       <S.registrationWrap>
-        <S.registrationLogo src="img/logo.png" alt="logo" />
+        <S.registrationLogo img src="../img/logo_modal.png" alt="logo" />
         <S.registrationName type="text" placeholder="Почта" />
         <S.registrationPassword type="text" placeholder="Пароль" />
         <S.registrationRepeatPass type="text" placeholder="Повторите пароль" />
