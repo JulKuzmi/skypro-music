@@ -23,7 +23,7 @@ function App() {
   }, []);
 
   return (
-    <body>
+    <>
       <S.GlobalStyle />
       <S.Wrapper>
         <S.Container>
@@ -40,7 +40,7 @@ function App() {
           <footer></footer>
         </S.Container>
       </S.Wrapper>
-    </body>
+    </>
   );
 }
 export default App;
