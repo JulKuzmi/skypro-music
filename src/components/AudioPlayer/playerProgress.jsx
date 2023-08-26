@@ -12,6 +12,16 @@ export const PlayerProgress = ({ audioRef, trackTime }) => {
     audioRef.current.currentTime = (progress / 100) * trackTime.length;
   };
 
+  // const handleClickProgressBar = (event) => {
+  //   const trackPercent =
+  //           (event.clientX / event.currentTarget.clientWidth) * 100;
+
+  //       if (refPlayer.current) {
+  //           refPlayer.current.currentTime = (duration / 100) * trackPercent;
+  //       }
+  //   };
+  // }
+
   return (
     <S.BarPlayerProgress onClick={changeTime} ref={progressRef}>
       <S.BarPlayerPointer

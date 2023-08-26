@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from "react";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
-import { useEffect, useRef, useState } from "react";
 
 export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -33,14 +33,14 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   }
 
   const handlePrev = () => {
-    alert("please wait");
+    alert("подождите....");
   };
 
   const handleNext = () => {
-    alert("please wait");
+    alert("подождите....");
   };
   const handleShuffle = () => {
-    alert("please wait");
+    alert("подождите....");
   };
   const handleRepeat = () => {
     setIsRepeat(!isRepeat);
