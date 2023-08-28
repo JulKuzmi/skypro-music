@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import * as S from "./components/Main/App.style";
-
 import { AppRoutes } from "./routes";
 import { getPlaylist } from "./components/api";
 

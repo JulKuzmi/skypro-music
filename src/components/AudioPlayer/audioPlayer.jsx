@@ -69,7 +69,7 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onTimeUpdate={handleProgress}
-                volume
+                volume={0}
               >
                 <source
                   src={currentTrack.track_file}
