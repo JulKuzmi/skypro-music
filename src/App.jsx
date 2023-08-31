@@ -1,7 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import * as S from "./components/Main/App.style";
 import { AppRoutes } from "./routes";
 import { getPlaylist } from "./components/api";
+import { createContext } from "react";
+
+export const UserContext = createContext("");
+export const useUserContext = () => {
+  const user = useContext(UserContext);
+  return user;
+};
 
 function App() {
   const [user, setUser] = useState(null);

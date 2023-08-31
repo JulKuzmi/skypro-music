@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
-import { formatTime } from "../playlist";
+// import { formatTime } from "../playlist";
 export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
@@ -22,25 +22,25 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
     if (isPlaying) handleClick();
   }, [currentTrack]);
 
-  // function formatTime(time) {
-  //   let minutes = Math.floor(time / 60);
-  //   let seconds = Math.floor(time - minutes * 60);
+  function formatTime(time) {
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time - minutes * 60);
 
-  //   if (minutes < 10) minutes = `0${minutes}`;
-  //   if (seconds < 10) seconds = `0${seconds}`;
+    if (minutes < 10) minutes = `0${minutes}`;
+    if (seconds < 10) seconds = `0${seconds}`;
 
-  //   return `${minutes}:${seconds}`;
-  // }
+    return `${minutes}:${seconds}`;
+  }
 
   const handlePrev = () => {
-    alert("подождите....");
+    alert("Функция пока не готова");
   };
 
   const handleNext = () => {
-    alert("подождите....");
+    alert("Функция пока не готова");
   };
   const handleShuffle = () => {
-    alert("подождите....");
+    alert("Функция пока не готова");
   };
   const handleRepeat = () => {
     setIsRepeat(!isRepeat);
@@ -69,7 +69,7 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onTimeUpdate={handleProgress}
-                volume={0}
+                volume
               >
                 <source
                   src={currentTrack.track_file}
