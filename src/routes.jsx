@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Login } from "./pages/login";
+import { Login } from "./pages/login/login";
 import { Registration } from "./pages/registration/registration";
 import { Main } from "./components/Main/Main";
 import { ProtectedRoute } from "./components/protector-route";
@@ -15,10 +15,13 @@ export const AppRoutes = ({
   setIsOpen,
   currentTrack,
   setCurrentTrack,
+  trackTime,
+  setTrackTime,
+  setUser,
 }) => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Login user={user} setUser={setUser} />} />
       <Route path="/registration" element={<Registration />} />
       <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
         <Route
@@ -31,6 +34,8 @@ export const AppRoutes = ({
               setIsOpen={setIsOpen}
               currentTrack={currentTrack}
               setCurrentTrack={setCurrentTrack}
+              trackTime={trackTime}
+              setTrackTime={setTrackTime}
             />
           }
         />

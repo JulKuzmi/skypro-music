@@ -13,7 +13,7 @@ export function SideBar() {
       setLoading(false);
     }, 5000);
     return () => clearTimeout(time);
-  }, [songs]);
+  }, []);
   return (
     <S.MainSideBar>
       <S.SideBarPersonal>
