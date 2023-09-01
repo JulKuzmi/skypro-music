@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 // import { formatTime } from "../playlist";
 import * as S from "./audioPlayer.style";
-
 export const PlayerProgress = ({ audioRef, trackTime }) => {
   const progressRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(1);
