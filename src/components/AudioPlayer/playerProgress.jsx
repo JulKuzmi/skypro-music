@@ -1,14 +1,14 @@
 import { useState, useRef } from "react";
-// import { formatTime } from "../playlist";
 import * as S from "./audioPlayer.style";
+
 export const PlayerProgress = ({ audioRef, trackTime }) => {
   const progressRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(1);
   const duration = 230;
 
-  const changeTime = (e) => {
+  const changeTime = (event) => {
     const width = progressRef.current.clientWidth;
-    const offset = e.nativeEvent.offsetX;
+    const offset = event.nativeEvent.offsetX;
     const progress = (offset / width) * 100;
     audioRef.current.currentTime = (progress / 100) * trackTime.length;
   };

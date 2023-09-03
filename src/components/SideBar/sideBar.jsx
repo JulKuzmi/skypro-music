@@ -1,11 +1,12 @@
 import { BarItem } from "../Bar/barItem";
-import { useUserContext } from "../../App";
+import { UserContextNew } from "../../App";
 import { SkeletonItem } from "../Track/sceleton";
 import { useNavigate } from "react-router-dom";
 import * as S from "./sideBar.style";
+import { useContext } from "react";
 
 export function SideBar(isLoading) {
-  const { user } = useUserContext();
+  const { user } = useContext(UserContextNew);
   let navigate = useNavigate();
   const avatarUser = () => {
     localStorage.removeItem("user");

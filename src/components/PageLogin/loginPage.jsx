@@ -1,48 +1,48 @@
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./loginPage.style";
-import { useEffect, useState } from "react";
-import { useUserContext } from "../../App";
+import { useEffect, useState, useContext } from "react";
+import { UserContextNew } from "../../App";
 import { registerUser, loginUser } from "../api";
 
 export function LoginPage({ isLoginMode = false }) {
-  const { setAuthUser } = useUserContext();
+  const { setUser } = useContext(UserContextNew);
   const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [login, setLogin] = useState(false);
   const [register, setRegister] = useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = async ({ email, password }) => {
     if (!email) {
-      setError("Заполните пожалуйста почту 😉");
+      setError("Не заполнена почта");
       return;
     } else if (!password) {
-      setError("Пароль не введён");
+      setError("Не введён пароль");
       return;
     }
     setLogin(true);
-    loginUser(email, password)
+    loginUser({ email, password })
       .then((data) => {
-        setAuthUser(data);
+        setUser(data);
         localStorage.setItem("user", JSON.stringify(data));
         navigate("/");
       })
-      .catch((error) => {
-        setError(error.message);
+      .catch((erro) => {
+        setError(erro.message);
       })
       .finally(() => {
         setLogin(false);
       });
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async ({ email, password }) => {
     if (!email) {
-      setError("Заполните пожалуйста почту");
+      setError("Не заполнена почта");
       return;
     } else if (!password) {
-      setError("Пароль не введён");
+      setError("Не введён пароль");
       return;
     } else if (!repeatPassword) {
       setError("Не введён пароль повторно");
@@ -52,12 +52,13 @@ export function LoginPage({ isLoginMode = false }) {
       return;
     }
     setRegister(true);
-    registerUser(email, password)
-      .then(() => {
+    registerUser({ email, password })
+      .then((data) => {
+        localStorage.setItem("user", JSON.stringify(data));
         navigate("/login");
       })
-      .catch((error) => {
-        setError(error.message);
+      .catch((erro) => {
+        setError(erro.message);
       })
       .finally(() => {
         setRegister(false);
@@ -139,11 +140,14 @@ export function LoginPage({ isLoginMode = false }) {
               />
               {error && <S.Error>{error}</S.Error>}
               <S.ModalBtnEnter
-                onClick={() => handleRegister}
+                onClick={() => handleRegister({ email, password })}
                 disabled={register}
               >
                 Зарегистрироваться
               </S.ModalBtnEnter>
+              <Link to="/login">
+                <S.ModalBtnSignup>Войти</S.ModalBtnSignup>
+              </Link>
             </>
           )}
         </S.ModalFormLogin>
