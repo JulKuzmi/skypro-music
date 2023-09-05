@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
+import { playlist } from "../playlist";
 // import { formatTime } from "../playlist";
 export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
-
+  // const currentTrack
   const handleClick = () => {
     const trackIsPlaying = !isPlaying;
     setIsPlaying(trackIsPlaying);
@@ -37,8 +38,13 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   };
 
   const handleNext = () => {
-    alert("Функция пока не готова");
+    // if (currentTrack.id < 15) {
+    //   const index = currentTrack.id + 1;
+    //   const nextTracks = playlist[index + 1].id;
+    // } else {
+    // }
   };
+
   const handleShuffle = () => {
     alert("Функция пока не готова");
   };
@@ -69,7 +75,7 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onTimeUpdate={handleProgress}
-                volume
+                volume="true"
               >
                 <source
                   src={currentTrack.track_file}
