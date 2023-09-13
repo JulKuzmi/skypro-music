@@ -23,21 +23,21 @@ export function LoginPage({ isLoginMode = false }) {
       return;
     }
     setLogin(true);
-    loginUser({ email, password })
+    loginUser(email, password)
       .then((data) => {
         setUser(data);
         localStorage.setItem("user", JSON.stringify(data));
         navigate("/");
       })
-      .catch((erro) => {
-        setError(erro.message);
+      .catch((error) => {
+        setError(error.message);
       })
       .finally(() => {
         setLogin(false);
       });
   };
 
-  const handleRegister = async ({ email, password }) => {
+  const handleRegister = async () => {
     if (!email) {
       setError("Не заполнена почта");
       return;
@@ -52,13 +52,12 @@ export function LoginPage({ isLoginMode = false }) {
       return;
     }
     setRegister(true);
-    registerUser({ email, password })
+    registerUser(email, password)
       .then((data) => {
-        localStorage.setItem("user", JSON.stringify(data));
         navigate("/login");
       })
-      .catch((erro) => {
-        setError(erro.message);
+      .catch((error) => {
+        setError(error.message);
       })
       .finally(() => {
         setRegister(false);
@@ -145,9 +144,6 @@ export function LoginPage({ isLoginMode = false }) {
               >
                 Зарегистрироваться
               </S.ModalBtnEnter>
-              <Link to="/login">
-                <S.ModalBtnSignup>Войти</S.ModalBtnSignup>
-              </Link>
             </>
           )}
         </S.ModalFormLogin>
