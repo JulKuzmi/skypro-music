@@ -1,6 +1,6 @@
 export async function getPlaylist() {
   const response = await fetch(
-    "https://painassasin.online/catalog/track/all/"
+    "https://skypro-music-api.skyeng.tech/catalog/track/all/"
   ).catch(() => {
     throw new Error("Не удалось загрузить плейлист, попробуйте позже");
   });
