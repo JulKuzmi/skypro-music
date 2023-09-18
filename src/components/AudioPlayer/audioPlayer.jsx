@@ -3,7 +3,7 @@ import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
 import { playlist } from "../playlist";
-// import { formatTime } from "../playlist";
+
 export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);

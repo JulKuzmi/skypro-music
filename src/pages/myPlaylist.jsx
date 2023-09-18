@@ -1,7 +1,8 @@
-export function MyPlaylist() {
+import * as S from "./myPlaylist.style";
+export const MyPlaylist = () => {
   return (
-    <div>
-      <p>My playlist</p>
-    </div>
+    <S.myPlaylist>
+      Страница&nbsp;<S.myPlaylistText>Мой плейлист</S.myPlaylistText>
+    </S.myPlaylist>
   );
-}
+};
