@@ -8,7 +8,6 @@ import { MyPlaylist } from "./pages/myPlaylist";
 import { Collection } from "./pages/collection";
 
 export const AppRoutes = ({
-  user,
   isLoading,
   tracks,
   isOpen,
@@ -17,15 +16,18 @@ export const AppRoutes = ({
   setCurrentTrack,
   trackTime,
   setTrackTime,
-  setUser,
 }) => {
   return (
     <Routes>
-      <Route path="/" element={<Login user={user} setUser={setUser} />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/registration" element={<Registration />} />
-      <Route element={<ProtectedRoute isAllowed={Boolean(user)} />}>
+      <Route
+        element={
+          <ProtectedRoute isAllowed={Boolean(localStorage.getItem("user"))} />
+        }
+      >
         <Route
-          path="/main"
+          path="/"
           element={
             <Main
               isLoading={isLoading}

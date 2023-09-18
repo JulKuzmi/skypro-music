@@ -1,24 +1,22 @@
 import { BarItem } from "../Bar/barItem";
-import { useEffect, useState } from "react";
+import { UserContextNew } from "../../App";
 import { SkeletonItem } from "../Track/sceleton";
+import { useNavigate } from "react-router-dom";
 import * as S from "./sideBar.style";
+import { useContext } from "react";
 
-export function SideBar() {
-  const [isLoading, setLoading] = useState([]);
-  const [songs, setPosts] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const time = setTimeout(() => {
-      setPosts(songs);
-      setLoading(false);
-    }, 5000);
-    return () => clearTimeout(time);
-  }, []);
+export function SideBar(isLoading) {
+  const { user } = useContext(UserContextNew);
+  let navigate = useNavigate();
+  const avatarUser = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <S.MainSideBar>
       <S.SideBarPersonal>
-        <S.SideBarPersonalName>Sergey.Ivanov</S.SideBarPersonalName>
-        <S.SideBarAvatar></S.SideBarAvatar>
+        <S.SideBarPersonalName>{user.username}</S.SideBarPersonalName>
+        <S.SideBarAvatar onClick={avatarUser}></S.SideBarAvatar>
       </S.SideBarPersonal>
       <S.SideBarBlock>
         <S.SideBarList>

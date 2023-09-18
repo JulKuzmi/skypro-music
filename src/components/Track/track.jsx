@@ -1,4 +1,3 @@
-// import { songs } from "../songs";
 import * as S from "./sceleton.style";
 
 export const TrackPage = ({ tracks, setCurrentTrack }) => {

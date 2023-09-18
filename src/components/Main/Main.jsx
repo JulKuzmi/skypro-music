@@ -20,7 +20,7 @@ export const Main = ({
         tracks={tracks}
         setCurrentTrack={setCurrentTrack}
       />
-      <SideBar />
+      <SideBar isLoading={isLoading} tracks={tracks} />
       <AudioPlayer
         currentTrack={currentTrack}
         trackTime={trackTime}
