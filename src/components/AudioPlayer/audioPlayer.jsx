@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
-import { playlist } from "../playlist";
 
 export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
   const [isPlaying, setIsPlaying] = useState(false);
