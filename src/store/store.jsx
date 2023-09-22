@@ -1,6 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import musicReducer from "./reducers/reducers";
-
-const store = configureStore({ reducer: musicReducer });
-
-export default store;
+import thunk from "redux-thunk";
+import musicReducer from "./slices/reducers";
+export const store = configureStore({
+  reducer: {
+    track: musicReducer,
+  },
+  middleware: [thunk],
+});
