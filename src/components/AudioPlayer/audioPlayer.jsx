@@ -1,26 +1,32 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setPlayTracks } from "../../store/slices/reducers";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
 
-export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+export function AudioPlayer({ setTrackTime, trackTime }) {
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
-  // const currentTrack
+
+  const dispatch = useDispatch();
+
+  const currentTrack = useSelector((state) => state.track.trackId);
+  const isShuffle = useSelector((state) => state.track.shufflePlaylist);
+  const isPlayingTracks = useSelector((state) => state.track.playTrack);
+
   const handleClick = () => {
-    const trackIsPlaying = !isPlaying;
-    setIsPlaying(trackIsPlaying);
-    if (trackIsPlaying) {
+    if (!isPlayingTracks) {
       audioRef.current.play();
     } else {
       audioRef.current.pause();
     }
+    dispatch(setPlayTracks(!isPlayingTracks));
   };
 
   useEffect(() => {
-    if (isPlaying) handleClick();
-  }, [currentTrack]);
+    if (isPlayingTracks) handleClick();
+  }, [currentTrack?.track_file]);
 
   function formatTime(time) {
     let minutes = Math.floor(time / 60);
@@ -32,21 +38,12 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
     return `${minutes}:${seconds}`;
   }
 
-  const handlePrev = () => {
-    alert("Функция пока не готова");
-  };
+  const handlePrev = () => {}; //dispatch
 
-  const handleNext = () => {
-    // if (currentTrack.id < 15) {
-    //   const index = currentTrack.id + 1;
-    //   const nextTracks = playlist[index + 1].id;
-    // } else {
-    // }
-  };
+  const handleNext = () => {}; //dispatch
 
-  const handleShuffle = () => {
-    alert("Функция пока не готова");
-  };
+  const handleShuffle = () => {};
+
   const handleRepeat = () => {
     setIsRepeat(!isRepeat);
   };
@@ -58,6 +55,10 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
       progress: (currentTimes / duration) * 100,
       length: duration,
     });
+    if (duration === currentTimes) {
+      handleNext();
+      dispatch(setPlayTracks(isPlayingTracks));
+    }
   };
 
   return (
@@ -67,20 +68,16 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
           <S.Bar>
             <S.BarContent>
               <audio
+                src={currentTrack.track_file}
                 controls
                 style={{ visibility: "hidden" }}
                 loop={isRepeat}
                 ref={audioRef}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
+                onPlay={() => setPlayTracks(true)}
+                onPause={() => setPlayTracks(false)}
                 onTimeUpdate={handleProgress}
                 volume="true"
-              >
-                <source
-                  src={currentTrack.track_file}
-                  type="audio/mpeg"
-                ></source>
-              </audio>
+              ></audio>
               <S.BarPlayerProgressTime>
                 {formatTime(audioRef.current?.currentTime || 0)}/
                 {formatTime(audioRef.current?.duration || 0)}
@@ -89,13 +86,13 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
               <S.BarPlayerBlock>
                 <S.BarPlayer>
                   <S.PlayerControls>
-                    <S.PlayerBtn onClick={handlePrev}>
-                      <S.PlayerBtnPrevSvg alt="prev">
+                    <S.PlayerBtn>
+                      <S.PlayerBtnPrevSvg alt="prev" onClick={handlePrev}>
                         <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
                       </S.PlayerBtnPrevSvg>
                     </S.PlayerBtn>
                     <S.PlayerBtn>
-                      {isPlaying ? (
+                      {isPlayingTracks ? (
                         <S.PlayerBtnPlaySvg alt="pause" onClick={handleClick}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -114,18 +111,26 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                         </S.PlayerBtnPlaySvg>
                       )}
                     </S.PlayerBtn>
-                    <S.PlayerBtnNext onClick={handleNext}>
-                      <S.PlayerBtnNextSvg alt="next">
+                    <S.PlayerBtnNext>
+                      <S.PlayerBtnNextSvg alt="next" onClick={handleNext}>
                         <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
                       </S.PlayerBtnNextSvg>
                     </S.PlayerBtnNext>
-                    <S.PlayerBtnRepeat onClick={handleRepeat}>
-                      <S.PlayerBtnRepeatSvg alt="repeat">
+                    <S.PlayerBtnRepeat>
+                      <S.PlayerBtnRepeatSvg
+                        alt="repeat"
+                        className={isRepeat ? "_btn-icon-active" : "_btn-icon"}
+                        onClick={handleRepeat}
+                      >
                         <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
                       </S.PlayerBtnRepeatSvg>
                     </S.PlayerBtnRepeat>
-                    <S.PlayerBtnShuffle onClick={handleShuffle}>
-                      <S.PlayerBtnShuffleSvg alt="shuffle">
+                    <S.PlayerBtnShuffle>
+                      <S.PlayerBtnShuffleSvg
+                        alt="shuffle"
+                        onClick={handleShuffle}
+                        className={isShuffle ? "_btn-icon-active" : "_btn-icon"}
+                      >
                         <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
                       </S.PlayerBtnShuffleSvg>
                     </S.PlayerBtnShuffle>

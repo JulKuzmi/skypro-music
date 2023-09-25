@@ -8,7 +8,6 @@ export const Main = ({
   isLoading,
   tracks,
   setCurrentTrack,
-  currentTrack,
   trackTime,
   setTrackTime,
 }) => {
@@ -22,9 +21,9 @@ export const Main = ({
       />
       <SideBar isLoading={isLoading} tracks={tracks} />
       <AudioPlayer
-        currentTrack={currentTrack}
         trackTime={trackTime}
         setTrackTime={setTrackTime}
+        setCurrentTrack={setCurrentTrack}
       />
     </S.Main>
   );

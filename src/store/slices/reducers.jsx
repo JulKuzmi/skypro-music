@@ -7,7 +7,7 @@ const initialState = {
   shufflePlaylist: [],
 };
 
-export const musicReducer = createSlice({
+export const tracksSlices = createSlice({
   name: "track",
   initialState,
   reducers: {
@@ -40,6 +40,6 @@ export const {
   setCurrentTracks,
   setShuffleTracks,
   setPlayTracks,
-} = musicReducer.actions;
+} = tracksSlices.actions;
 
-export default musicReducer.reducer;
+export default tracksSlices.reducer;
