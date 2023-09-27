@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPlayTracks } from "../../store/slices/reducers";
+import {
+  setShuffleTracks,
+  setPlayTracks,
+  setCurrentTracks,
+} from "../../store/slices/reducers";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
@@ -8,9 +12,10 @@ import { Volume } from "./playerVolume";
 export function AudioPlayer({ setTrackTime, trackTime }) {
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
 
   const dispatch = useDispatch();
-
+  const playlist = useSelector((state) => state.track.newPlaylist);
   const currentTrack = useSelector((state) => state.track.trackId);
   const isShuffle = useSelector((state) => state.track.shufflePlaylist);
   const isPlayingTracks = useSelector((state) => state.track.playTrack);
@@ -38,11 +43,60 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     return `${minutes}:${seconds}`;
   }
 
-  const handlePrev = () => {}; //dispatch
+  const handlePrev = () => {
+    if (audioRef.current?.currentTime > 5) {
+      audioRef.current.currentTime = 0;
+      return;
+    }
+    const trackList = shuffle ? { ...isShuffle } : { ...playlist };
+    let index = Object.keys(trackList).find(
+      (key) => trackList[key].id === currentTrack.id
+    );
+    if (+index === 0) return;
+    index = +index - 1;
+    setCurrentTracks({
+      id: trackList[index].id,
+      author: trackList[index].author,
+      title: trackList[index].name,
+      track_file: trackList[index].track_file,
+      progress: 0,
+      time: trackList[index].duration_in_seconds,
+    });
+    dispatch(setCurrentTracks(trackList[index].id));
+    console.log(trackList[index]);
+  };
 
-  const handleNext = () => {}; //dispatch
+  const handleNext = () => {
+    const trackList = shuffle ? { ...isShuffle } : { ...playlist };
+    let index = Object.keys(trackList).find(
+      (key) => trackList[key].id === currentTrack.id
+    );
+    if (+index === Object.keys(trackList).length - 1) return;
+    index = +index + 1;
+    setCurrentTracks({
+      id: trackList[index].id,
+      author: trackList[index].author,
+      title: trackList[index].name,
+      track_file: trackList[index].track_file,
+      progress: 0,
+      time: trackList[index].duration_in_seconds,
+    });
+    dispatch(setCurrentTracks(trackList[index].id));
+    console.log(trackList[index]);
+  };
 
-  const handleShuffle = () => {};
+  const handleShuffle = () => {
+    if (shuffle) {
+      setShuffle(false);
+      dispatch(setShuffleTracks({}));
+    } else {
+      const shuffleTracks = Object.values(playlist).sort(function () {
+        return Math.round(Math.random()) - 0.5;
+      });
+      setShuffle(true);
+      dispatch(setShuffleTracks({ ...shuffleTracks }));
+    }
+  };
 
   const handleRepeat = () => {
     setIsRepeat(!isRepeat);
@@ -57,7 +111,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     });
     if (duration === currentTimes) {
       handleNext();
-      dispatch(setPlayTracks(isPlayingTracks));
+      dispatch(setPlayTracks(!isPlayingTracks));
     }
   };
 
@@ -65,19 +119,19 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     <>
       {currentTrack ? (
         <>
+          <audio
+            src={currentTrack.track_file}
+            controls
+            style={{ visibility: "hidden" }}
+            loop={isRepeat}
+            ref={audioRef}
+            onPlay={() => setPlayTracks(true)}
+            onPause={() => setPlayTracks(false)}
+            onTimeUpdate={handleProgress}
+            volume="true"
+          ></audio>
           <S.Bar>
             <S.BarContent>
-              <audio
-                src={currentTrack.track_file}
-                controls
-                style={{ visibility: "hidden" }}
-                loop={isRepeat}
-                ref={audioRef}
-                onPlay={() => setPlayTracks(true)}
-                onPause={() => setPlayTracks(false)}
-                onTimeUpdate={handleProgress}
-                volume="true"
-              ></audio>
               <S.BarPlayerProgressTime>
                 {formatTime(audioRef.current?.currentTime || 0)}/
                 {formatTime(audioRef.current?.duration || 0)}
@@ -135,7 +189,6 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
                       </S.PlayerBtnShuffleSvg>
                     </S.PlayerBtnShuffle>
                   </S.PlayerControls>
-
                   <S.PlayerTrackPlay>
                     <S.TrackPlayContain>
                       <S.TrackPlayImage>
@@ -154,7 +207,6 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
                         </S.TrackPlayAlbumLink>
                       </S.TrackPlayAlbum>
                     </S.TrackPlayContain>
-
                     <S.TrackPlayLike>
                       <S.TrackPlayLikeBtn>
                         <S.TrackPlayLikeSvg alt="like">
