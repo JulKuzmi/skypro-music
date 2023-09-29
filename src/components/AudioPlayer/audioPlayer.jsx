@@ -111,7 +111,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     });
     if (duration === currentTimes) {
       handleNext();
-      dispatch(setPlayTracks(!isPlayingTracks));
+      dispatch(setPlayTracks(isPlayingTracks));
     }
   };
 
@@ -119,19 +119,19 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     <>
       {currentTrack ? (
         <>
-          <audio
-            src={currentTrack.track_file}
-            controls
-            style={{ visibility: "hidden" }}
-            loop={isRepeat}
-            ref={audioRef}
-            onPlay={() => setPlayTracks(true)}
-            onPause={() => setPlayTracks(false)}
-            onTimeUpdate={handleProgress}
-            volume="true"
-          ></audio>
           <S.Bar>
             <S.BarContent>
+              <audio
+                src={currentTrack.track_file}
+                controls
+                style={{ visibility: "hidden" }}
+                loop={isRepeat}
+                ref={audioRef}
+                onPlay={() => setPlayTracks(true)}
+                onPause={() => setPlayTracks(false)}
+                onTimeUpdate={handleProgress}
+                volume="true"
+              ></audio>
               <S.BarPlayerProgressTime>
                 {formatTime(audioRef.current?.currentTime || 0)}/
                 {formatTime(audioRef.current?.duration || 0)}
@@ -189,6 +189,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
                       </S.PlayerBtnShuffleSvg>
                     </S.PlayerBtnShuffle>
                   </S.PlayerControls>
+
                   <S.PlayerTrackPlay>
                     <S.TrackPlayContain>
                       <S.TrackPlayImage>
@@ -207,6 +208,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
                         </S.TrackPlayAlbumLink>
                       </S.TrackPlayAlbum>
                     </S.TrackPlayContain>
+
                     <S.TrackPlayLike>
                       <S.TrackPlayLikeBtn>
                         <S.TrackPlayLikeSvg alt="like">
