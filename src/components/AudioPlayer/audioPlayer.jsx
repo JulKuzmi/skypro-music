@@ -80,6 +80,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
       track_file: trackList[index].track_file,
       progress: 0,
       time: trackList[index].duration_in_seconds,
+      staredUser: trackList[index].stared_user,
     });
     dispatch(setCurrentTracks(trackList[index].id));
     console.log(trackList[index]);
@@ -111,7 +112,7 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     });
     if (duration === currentTimes) {
       handleNext();
-      dispatch(setPlayTracks(isPlayingTracks));
+      dispatch(setPlayTracks(!isPlayingTracks));
     }
   };
 
@@ -119,19 +120,19 @@ export function AudioPlayer({ setTrackTime, trackTime }) {
     <>
       {currentTrack ? (
         <>
+          <audio
+            src={currentTrack.track_file}
+            controls
+            style={{ visibility: "hidden" }}
+            loop={isRepeat}
+            ref={audioRef}
+            onPlay={() => setPlayTracks(true)}
+            onPause={() => setPlayTracks(false)}
+            onTimeUpdate={handleProgress}
+            volume="true"
+          ></audio>
           <S.Bar>
             <S.BarContent>
-              <audio
-                src={currentTrack.track_file}
-                controls
-                style={{ visibility: "hidden" }}
-                loop={isRepeat}
-                ref={audioRef}
-                onPlay={() => setPlayTracks(true)}
-                onPause={() => setPlayTracks(false)}
-                onTimeUpdate={handleProgress}
-                volume="true"
-              ></audio>
               <S.BarPlayerProgressTime>
                 {formatTime(audioRef.current?.currentTime || 0)}/
                 {formatTime(audioRef.current?.duration || 0)}

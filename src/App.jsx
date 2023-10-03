@@ -1,7 +1,7 @@
 import { getPlaylist } from "./components/api";
 import { useDispatch } from "react-redux";
 import { setNewTracks } from "./store/slices/reducers";
-
+import { AudioPlayer } from "./components/AudioPlayer/audioPlayer";
 import { useState, useEffect, createContext } from "react";
 import * as S from "./components/Main/App.style";
 import { AppRoutes } from "./routes";
@@ -43,6 +43,7 @@ function App() {
             setTrackTime={setTrackTime}
             setUser={setUser}
           />
+          <AudioPlayer trackTime={trackTime} setTrackTime={setTrackTime} />
           <footer></footer>
         </UserContextNew.Provider>
       </S.Container>

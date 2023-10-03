@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 export const PlaylistItem = styled.div`
   width: 100%;
   display: block;
@@ -82,6 +83,7 @@ export const TrackSvg = styled.svg`
   display: block;
   animation: bubble_out 0.6s ease-in-out infinite both;
 }
+
 @keyframes bubble_out {
   0%,
   to {
