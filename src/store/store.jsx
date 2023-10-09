@@ -1,9 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
 import trackReducer from "./slices/reducers";
 export const store = configureStore({
   reducer: {
     track: trackReducer,
   },
-  middleware: [thunk],
 });

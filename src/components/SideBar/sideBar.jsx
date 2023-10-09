@@ -1,6 +1,6 @@
 import { BarItem } from "../Bar/barItem";
 import { UserContextNew } from "../../App";
-import { SkeletonItem } from "../Track/sceleton";
+// import { SkeletonItem } from "../Track/sceleton";
 import { useNavigate } from "react-router-dom";
 import * as S from "./sideBar.style";
 import { useContext } from "react";
@@ -20,8 +20,7 @@ export function SideBar({ isLoading }) {
       </S.SideBarPersonal>
       <S.SideBarBlock>
         <S.SideBarList>
-          {isLoading && <SkeletonItem />}
-          {!isLoading && <BarItem />}
+          <BarItem isLoading={isLoading} />
         </S.SideBarList>
       </S.SideBarBlock>
     </S.MainSideBar>
