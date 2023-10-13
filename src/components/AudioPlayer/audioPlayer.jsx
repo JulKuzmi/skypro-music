@@ -1,27 +1,37 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setShuffleTracks,
+  setPlayTracks,
+  setCurrentTracks,
+} from "../../store/slices/reducers";
 import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
-import { playlist } from "../playlist";
-// import { formatTime } from "../playlist";
-export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+
+export function AudioPlayer({ tracks }) {
+  const [trackTime, setTrackTime] = useState({});
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
-  // const currentTrack
+  const [shuffle, setShuffle] = useState(false);
+
+  const dispatch = useDispatch();
+  const currentTrack = useSelector((state) => state.track.trackId);
+  const isShuffle = useSelector((state) => state.track.shufflePlaylist);
+  const isPlayingTracks = useSelector((state) => state.track.playTrack);
+
   const handleClick = () => {
-    const trackIsPlaying = !isPlaying;
-    setIsPlaying(trackIsPlaying);
-    if (trackIsPlaying) {
+    if (!isPlayingTracks) {
       audioRef.current.play();
     } else {
       audioRef.current.pause();
     }
+    dispatch(setPlayTracks(!isPlayingTracks));
   };
 
   useEffect(() => {
-    if (isPlaying) handleClick();
-  }, [currentTrack]);
+    if (isPlayingTracks) handleClick();
+  }, [currentTrack?.track_file]);
 
   function formatTime(time) {
     let minutes = Math.floor(time / 60);
@@ -32,22 +42,63 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
 
     return `${minutes}:${seconds}`;
   }
+  const trackList = shuffle ? isShuffle : tracks;
+  const handleNext = () => {
+    console.log(isShuffle);
+    let index = trackList.findIndex((item) => item?.id === currentTrack.id);
+    if (+index === trackList.length - 1) return;
+    index = +index + 1;
 
-  const handlePrev = () => {
-    alert("Функция пока не готова");
+    dispatch(
+      setCurrentTracks({
+        id: trackList[index].id,
+        author: trackList[index].author,
+        name: trackList[index].name,
+        track_file: trackList[index].track_file,
+        progress: 0,
+        length: trackList[index].duration_in_seconds,
+        staredUser: trackList[index].stared_user,
+      })
+    );
   };
 
-  const handleNext = () => {
-    // if (currentTrack.id < 15) {
-    //   const index = currentTrack.id + 1;
-    //   const nextTracks = playlist[index + 1].id;
-    // } else {
-    // }
+  const handlePrev = () => {
+    const trackList = shuffle ? [isShuffle] : tracks;
+    if (audioRef.current?.currentTime > 5) {
+      audioRef.current.currentTime = 0;
+      return;
+    }
+    let index = trackList.findIndex((item) => item.id === currentTrack.id);
+    if (+index === 0) return;
+    index = +index - 1;
+
+    dispatch(
+      setCurrentTracks({
+        id: trackList[index].id,
+        author: trackList[index].author,
+        title: trackList[index].name,
+        track_file: trackList[index].track_file,
+        progress: 0,
+        length: trackList[index].duration_in_seconds,
+        staredUser: trackList[index].stared_user,
+      })
+    );
   };
 
   const handleShuffle = () => {
-    alert("Функция пока не готова");
+    if (shuffle) {
+      setShuffle(false);
+      dispatch(setShuffleTracks([]));
+    } else {
+      const shuffleTracks = [...tracks].sort(function () {
+        return Math.round(Math.random()) - 0.5;
+      });
+      console.log(shuffleTracks);
+      setShuffle(true);
+      dispatch(setShuffleTracks(shuffleTracks));
+    }
   };
+
   const handleRepeat = () => {
     setIsRepeat(!isRepeat);
   };
@@ -59,29 +110,31 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
       progress: (currentTimes / duration) * 100,
       length: duration,
     });
+    if (duration === currentTimes) {
+      handleNext();
+      dispatch(setPlayTracks(!isPlayingTracks));
+    }
   };
+
+  useEffect(() => {}, [currentTrack]);
 
   return (
     <>
       {currentTrack ? (
         <>
+          <audio
+            src={currentTrack.track_file}
+            controls
+            style={{ visibility: "hidden" }}
+            loop={isRepeat}
+            ref={audioRef}
+            onPlay={() => setPlayTracks(true)}
+            onPause={() => setPlayTracks(false)}
+            onTimeUpdate={handleProgress}
+            volume="true"
+          ></audio>
           <S.Bar>
             <S.BarContent>
-              <audio
-                controls
-                style={{ visibility: "hidden" }}
-                loop={isRepeat}
-                ref={audioRef}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onTimeUpdate={handleProgress}
-                volume="true"
-              >
-                <source
-                  src={currentTrack.track_file}
-                  type="audio/mpeg"
-                ></source>
-              </audio>
               <S.BarPlayerProgressTime>
                 {formatTime(audioRef.current?.currentTime || 0)}/
                 {formatTime(audioRef.current?.duration || 0)}
@@ -90,13 +143,13 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
               <S.BarPlayerBlock>
                 <S.BarPlayer>
                   <S.PlayerControls>
-                    <S.PlayerBtn onClick={handlePrev}>
-                      <S.PlayerBtnPrevSvg alt="prev">
+                    <S.PlayerBtn>
+                      <S.PlayerBtnPrevSvg alt="prev" onClick={handlePrev}>
                         <use xlinkHref="img/icon/sprite.svg#icon-prev"></use>
                       </S.PlayerBtnPrevSvg>
                     </S.PlayerBtn>
                     <S.PlayerBtn>
-                      {isPlaying ? (
+                      {isPlayingTracks ? (
                         <S.PlayerBtnPlaySvg alt="pause" onClick={handleClick}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -115,18 +168,26 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                         </S.PlayerBtnPlaySvg>
                       )}
                     </S.PlayerBtn>
-                    <S.PlayerBtnNext onClick={handleNext}>
-                      <S.PlayerBtnNextSvg alt="next">
+                    <S.PlayerBtnNext>
+                      <S.PlayerBtnNextSvg alt="next" onClick={handleNext}>
                         <use xlinkHref="img/icon/sprite.svg#icon-next"></use>
                       </S.PlayerBtnNextSvg>
                     </S.PlayerBtnNext>
-                    <S.PlayerBtnRepeat onClick={handleRepeat}>
-                      <S.PlayerBtnRepeatSvg alt="repeat">
+                    <S.PlayerBtnRepeat>
+                      <S.PlayerBtnRepeatSvg
+                        alt="repeat"
+                        className={isRepeat ? "_btn-icon-active" : "_btn-icon"}
+                        onClick={handleRepeat}
+                      >
                         <use xlinkHref="img/icon/sprite.svg#icon-repeat"></use>
                       </S.PlayerBtnRepeatSvg>
                     </S.PlayerBtnRepeat>
-                    <S.PlayerBtnShuffle onClick={handleShuffle}>
-                      <S.PlayerBtnShuffleSvg alt="shuffle">
+                    <S.PlayerBtnShuffle>
+                      <S.PlayerBtnShuffleSvg
+                        alt="shuffle"
+                        onClick={handleShuffle}
+                        className={isShuffle ? "_btn-icon-active" : "_btn-icon"}
+                      >
                         <use xlinkHref="img/icon/sprite.svg#icon-shuffle"></use>
                       </S.PlayerBtnShuffleSvg>
                     </S.PlayerBtnShuffle>
@@ -150,19 +211,6 @@ export function AudioPlayer({ currentTrack, setTrackTime, trackTime }) {
                         </S.TrackPlayAlbumLink>
                       </S.TrackPlayAlbum>
                     </S.TrackPlayContain>
-
-                    <S.TrackPlayLike>
-                      <S.TrackPlayLikeBtn>
-                        <S.TrackPlayLikeSvg alt="like">
-                          <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
-                        </S.TrackPlayLikeSvg>
-                      </S.TrackPlayLikeBtn>
-                      <S.TrackPlayDislike>
-                        <S.TrackPlayDislikeSvg alt="dislike">
-                          <use xlinkHref="img/icon/sprite.svg#icon-dislike"></use>
-                        </S.TrackPlayDislikeSvg>
-                      </S.TrackPlayDislike>
-                    </S.TrackPlayLike>
                   </S.PlayerTrackPlay>
                 </S.BarPlayer>
                 <Volume audioRef={audioRef} />

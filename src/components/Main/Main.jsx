@@ -1,31 +1,19 @@
 import { Nav } from "../NavMenu/navMenu";
 import { SideBar } from "../SideBar/sideBar";
 import { TrackList } from "../TrackList/trackList";
-import { AudioPlayer } from "../AudioPlayer/audioPlayer";
+// import { AudioPlayer } from "../AudioPlayer/audioPlayer";
 import * as S from "./App.style";
 
-export const Main = ({
-  isLoading,
-  tracks,
-  setCurrentTrack,
-  currentTrack,
-  trackTime,
-  setTrackTime,
-}) => {
+export const Main = ({ isLoading, setCurrentTrack, tracks }) => {
   return (
     <S.Main>
       <Nav />
       <TrackList
         isLoading={isLoading}
-        tracks={tracks}
         setCurrentTrack={setCurrentTrack}
+        tracks={tracks}
       />
-      <SideBar isLoading={isLoading} tracks={tracks} />
-      <AudioPlayer
-        currentTrack={currentTrack}
-        trackTime={trackTime}
-        setTrackTime={setTrackTime}
-      />
+      <SideBar isLoading={isLoading} setCurrentTrack={setCurrentTrack} />
     </S.Main>
   );
 };

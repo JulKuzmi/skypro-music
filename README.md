@@ -69,5 +69,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-временная оценка работы: 6 часов
-фактическое затраченное время: ~25ч
+временная оценка работы: 10 часов
+фактическое затраченное время: 62 часов
