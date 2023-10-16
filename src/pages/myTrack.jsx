@@ -1,7 +1,12 @@
 import { SceletonCard } from "../components/Track/sceleton";
+import { TrackPage } from "../components/Track/track";
 import * as S from "../components/TrackList/trackList.style";
+import { useGetAllMyTracksQuery } from "../services/tracks";
+import { useAuthSelector } from "../store/slices/auth";
 
-export function MyTrack({ isLoading }) {
+export function MyTrack({ setCurrentTrack }) {
+  const auth = useAuthSelector();
+  const { data = [], isLoading, error } = useGetAllMyTracksQuery({ auth });
   return (
     <S.MainCenterblock>
       <S.CenterblockSearch>
@@ -23,7 +28,18 @@ export function MyTrack({ isLoading }) {
           </S.PlaylistTitleCol4>
         </S.ContentTitle>
         <S.ContentPlaylist>
-          {isLoading ? <SceletonCard /> : <p>В этом плейлисте нет треков</p>}
+          {isLoading ? (
+            <SceletonCard />
+          ) : (
+            data?.map((item) => (
+              <TrackPage
+                key={item.id}
+                error={error}
+                song={item}
+                setCurrentTrack={setCurrentTrack}
+              />
+            ))
+          )}
         </S.ContentPlaylist>
       </S.CenterblockContent>
     </S.MainCenterblock>

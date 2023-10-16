@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  useDislikeTrackMutation,
+  useLikeTrackMutation,
+} from "../../services/tracks";
+import {
   setShuffleTracks,
   setPlayTracks,
   setCurrentTracks,
@@ -9,13 +13,14 @@ import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
 
-export function AudioPlayer({ tracks }) {
+export function AudioPlayer() {
   const [trackTime, setTrackTime] = useState({});
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
   const [shuffle, setShuffle] = useState(false);
 
   const dispatch = useDispatch();
+  const playlist = useSelector((state) => state.track.newPlaylist);
   const currentTrack = useSelector((state) => state.track.trackId);
   const isShuffle = useSelector((state) => state.track.shufflePlaylist);
   const isPlayingTracks = useSelector((state) => state.track.playTrack);
@@ -42,10 +47,10 @@ export function AudioPlayer({ tracks }) {
 
     return `${minutes}:${seconds}`;
   }
-  const trackList = shuffle ? isShuffle : tracks;
+  const trackList = shuffle ? isShuffle : playlist;
+
   const handleNext = () => {
-    console.log(isShuffle);
-    let index = trackList.findIndex((item) => item?.id === currentTrack.id);
+    let index = trackList.findIndex((item) => item.id === currentTrack.id);
     if (+index === trackList.length - 1) return;
     index = +index + 1;
 
@@ -54,7 +59,7 @@ export function AudioPlayer({ tracks }) {
         id: trackList[index].id,
         author: trackList[index].author,
         name: trackList[index].name,
-        track_file: trackList[index].track_file,
+        trackFile: trackList[index].track_file,
         progress: 0,
         length: trackList[index].duration_in_seconds,
         staredUser: trackList[index].stared_user,
@@ -63,7 +68,6 @@ export function AudioPlayer({ tracks }) {
   };
 
   const handlePrev = () => {
-    const trackList = shuffle ? [isShuffle] : tracks;
     if (audioRef.current?.currentTime > 5) {
       audioRef.current.currentTime = 0;
       return;
@@ -77,7 +81,7 @@ export function AudioPlayer({ tracks }) {
         id: trackList[index].id,
         author: trackList[index].author,
         title: trackList[index].name,
-        track_file: trackList[index].track_file,
+        trackFile: trackList[index].track_file,
         progress: 0,
         length: trackList[index].duration_in_seconds,
         staredUser: trackList[index].stared_user,
@@ -90,12 +94,11 @@ export function AudioPlayer({ tracks }) {
       setShuffle(false);
       dispatch(setShuffleTracks([]));
     } else {
-      const shuffleTracks = [...tracks].sort(function () {
+      const shuffleTracks = [...playlist].sort(function () {
         return Math.round(Math.random()) - 0.5;
       });
-      console.log(shuffleTracks);
       setShuffle(true);
-      dispatch(setShuffleTracks(shuffleTracks));
+      dispatch(setShuffleTracks([...shuffleTracks]));
     }
   };
 
@@ -115,8 +118,30 @@ export function AudioPlayer({ tracks }) {
       dispatch(setPlayTracks(!isPlayingTracks));
     }
   };
+  let auth = JSON.parse(localStorage.getItem("user"));
+  const [like, { likeError }] = useLikeTrackMutation();
+  const [dislike, { dislikeError }] = useDislikeTrackMutation();
+  const [isLike, setIsLike] = useState(auth);
 
-  useEffect(() => {}, [currentTrack]);
+  useEffect(() => {
+    setIsLike(auth);
+  }, [currentTrack]);
+
+  const handleLike = async () => {
+    setIsLike(true);
+    await like({
+      id: currentTrack.id,
+    }).unwrap();
+    dispatch(setCurrentTracks(currentTrack));
+  };
+
+  const handleDislike = async () => {
+    setIsLike(false);
+    await dislike({
+      id: currentTrack.id,
+    }).unwrap();
+    dispatch(setCurrentTracks(currentTrack));
+  };
 
   return (
     <>
@@ -211,6 +236,28 @@ export function AudioPlayer({ tracks }) {
                         </S.TrackPlayAlbumLink>
                       </S.TrackPlayAlbum>
                     </S.TrackPlayContain>
+
+                    <S.TrackPlayLike>
+                      {isLike ? (
+                        <S.TrackPlayLikeBtn>
+                          <S.TrackPlayLikeSvg
+                            alt="like"
+                            onClick={() => handleLike(currentTrack.id)}
+                          >
+                            <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+                          </S.TrackPlayLikeSvg>
+                        </S.TrackPlayLikeBtn>
+                      ) : (
+                        <S.TrackPlayDislike>
+                          <S.TrackPlayDislikeSvg
+                            alt="dislike"
+                            onClick={() => handleDislike(currentTrack.id)}
+                          >
+                            <use xlinkHref="img/icon/sprite.svg#icon-dislike"></use>
+                          </S.TrackPlayDislikeSvg>
+                        </S.TrackPlayDislike>
+                      )}
+                    </S.TrackPlayLike>
                   </S.PlayerTrackPlay>
                 </S.BarPlayer>
                 <Volume audioRef={audioRef} />
