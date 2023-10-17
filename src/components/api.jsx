@@ -1,82 +1,140 @@
-const host = "https://skypro-music-api.skyeng.tech/";
-let url = "";
-
-export const getAccessToken = async (email, password) => {
-  url = "user/token/";
-  return fetch(host + url, {
-    method: "POST",
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-    headers: {
-      "content-type": "application/json",
-    },
-  }).then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    }
-
-    throw new Error("Ошибка,попробуйте заново...");
-  });
-};
-
-export const loginUser = async (email, password) => {
-  url = "user/login/";
-  return fetch(host + url, {
-    method: "POST",
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-    headers: {
-      "content-type": "application/json",
-    },
-  }).then((response) => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    if (response.status === 401) {
-      throw new Error("Пользователь с таким email или паролем не найден");
-    }
-
-    throw new Error("Ошибка,попробуйте заново...");
-  });
-};
-
-export const registerUser = async (email, password) => {
-  url = "user/signup/";
-  return fetch(host + url, {
-    method: "POST",
-    body: JSON.stringify({
-      email: email,
-      password: password,
-      username: email,
-    }),
-    headers: {
-      "content-type": "application/json",
-    },
-  }).then((response) => {
-    if (response.status === 201) {
-      return response.json();
-    }
-    if (response.status === 400) {
-      throw new Error("Пользователь с таким именем уже существует");
-    }
-
-    throw new Error("Ошибка...");
-  });
-};
-
 export async function getPlaylist() {
-  url = "catalog/track/all/";
-  return fetch(host + url, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else throw new Error();
-    })
-    .then((json) => json);
+  const response = await fetch(
+    "https://skypro-music-api.skyeng.tech/catalog/track/all/"
+  ).catch((error) => {
+    throw new Error("Не удалось загрузить плейлист");
+  });
+
+  const data = await response.json();
+  return data;
+}
+
+export async function loginUser({ email, password }) {
+  const response = await fetch(
+    "https://skypro-music-api.skyeng.tech/user/login/",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+  if (response.status === 401) {
+    throw new Error("Пользователь с таким email или паролем не найден");
+  } else if (response.status === 500) {
+    throw new Error("error");
+  }
+  const data = await response.json();
+  return data;
+}
+
+export async function registerUser({ email, password }) {
+  const response = await fetch(
+    "https://skypro-music-api.skyeng.tech/user/signup/",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        username: email,
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+  if (response.status === 400) {
+    throw new Error("Такой пользователь уже существует");
+  } else if (response.status === 500) {
+    throw new Error("error");
+  }
+  const data = await response.json();
+  return data;
+}
+
+function saveToken(token) {
+  const tokenObject = JSON.parse(token);
+  localStorage.setItem("access", JSON.stringify(tokenObject.access));
+  localStorage.setItem("refresh", JSON.stringify(tokenObject.refresh));
+}
+
+export async function getToken({ email, password }) {
+  const response = await fetch(
+    "https://skypro-music-api.skyeng.tech/user/token/",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+
+  if (response.status === 400) {
+    throw new Error("Неверный запрос");
+  }
+
+  if (response.status === 401) {
+    const errorData = await response.json();
+    let errorMessage = "";
+
+    if (errorData.hasOwnProperty("detail")) {
+      errorMessage = errorData.detail;
+    }
+
+    throw new Error(errorMessage);
+  }
+
+  if (response.status === 500) {
+    throw new Error("error");
+  }
+
+  const data = await response.json();
+  saveToken(JSON.stringify(data));
+  return data;
+}
+
+export async function refreshToken(tokenRefresh) {
+  const response = await fetch(
+    "https://skypro-music-api.skyeng.tech/user/token/refresh/",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        refresh: tokenRefresh,
+      }),
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+  );
+
+  if (response.status === 400) {
+    throw new Error("Неверный запрос");
+  }
+
+  if (response.status === 401) {
+    const errorData = await response.json();
+    let errorMessage = "Ошибка";
+
+    if (errorData.hasOwnProperty("detail")) {
+      errorMessage = errorData.detail;
+    }
+
+    throw new Error(errorMessage);
+  }
+
+  if (response.status === 500) {
+    throw new Error("error");
+  }
+
+  const data = await response.json();
+  saveToken(JSON.stringify(data));
+  return data;
 }

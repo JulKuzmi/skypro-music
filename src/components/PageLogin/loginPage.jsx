@@ -1,11 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import * as S from "./loginPage.style";
-import { useEffect, useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { registerUser, loginUser, getToken } from "../api";
 import { UserContextNew } from "../../App";
-import { registerUser, loginUser } from "../api";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../../store/slices/auth";
 
 export function LoginPage({ isLoginMode = false }) {
   const { setUser } = useContext(UserContextNew);
+  const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,21 +26,34 @@ export function LoginPage({ isLoginMode = false }) {
       return;
     }
     setLogin(true);
-    loginUser(email, password)
-      .then((data) => {
-        setUser(data);
-        localStorage.setItem("user", JSON.stringify(data));
+    try {
+      await loginUser({ email, password }).then((dat) => {
+        localStorage.setItem("user", JSON.stringify(dat));
+        setUser(dat);
         navigate("/");
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setLogin(false);
       });
+    } catch (erro) {
+      setError(erro.message);
+    } finally {
+      setLogin(false);
+    }
+    try {
+      await getToken({ email, password }).then((token) => {
+        dispatch(
+          setAuth({
+            access: token.access,
+            refresh: token.refresh,
+            user: JSON.parse(sessionStorage.getItem("user")),
+          })
+        );
+      });
+    } catch (error) {
+      console.log(error);
+      navigate("/login");
+    }
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async ({ email, password }) => {
     if (!email) {
       setError("Не заполнена почта");
       return;
@@ -52,16 +68,14 @@ export function LoginPage({ isLoginMode = false }) {
       return;
     }
     setRegister(true);
-    registerUser(email, password)
-      .then((data) => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        setError(error.message);
-      })
-      .finally(() => {
-        setRegister(false);
-      });
+    try {
+      await registerUser({ email, password });
+      navigate("/login");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setRegister(false);
+    }
   };
 
   useEffect(() => {
@@ -144,6 +158,9 @@ export function LoginPage({ isLoginMode = false }) {
               >
                 Зарегистрироваться
               </S.ModalBtnEnter>
+              <Link to="/login">
+                <S.ModalBtnSignup>Войти</S.ModalBtnSignup>
+              </Link>
             </>
           )}
         </S.ModalFormLogin>

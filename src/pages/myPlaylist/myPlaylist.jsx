@@ -1,8 +1,8 @@
-import { AudioPlayer } from "../components/AudioPlayer/audioPlayer";
-import { Nav } from "../components/NavMenu/navMenu";
-import * as S from "../components/Main/App.style";
+import { AudioPlayer } from "../../components/AudioPlayer/audioPlayer";
+import { Nav } from "../../components/NavMenu/navMenu";
+import * as S from "../../components/Main/App.style";
 import { MyTrack } from "./myTrack";
-import { SideBar } from "../components/SideBar/sideBar";
+import { SideBar } from "../../components/SideBar/sideBar";
 export const MyPlaylist = ({
   trackTime,
   setTrackTime,

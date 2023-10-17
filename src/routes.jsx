@@ -4,8 +4,8 @@ import { Registration } from "./pages/registration/registration";
 import { Main } from "./components/Main/Main";
 import { ProtectedRoute } from "./components/protector-route";
 import { NotFound } from "./pages/notFound";
-import { MyPlaylist } from "./pages/myPlaylist";
-import { Collection } from "./pages/collection";
+import { MyPlaylist } from "./pages/myPlaylist/myPlaylist";
+import { Collection } from "./pages/category/collection";
 
 export const AppRoutes = ({
   isLoading,

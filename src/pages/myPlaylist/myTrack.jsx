@@ -1,8 +1,8 @@
-import { SceletonCard } from "../components/Track/sceleton";
-import { TrackPage } from "../components/Track/track";
-import * as S from "../components/TrackList/trackList.style";
-import { useGetAllMyTracksQuery } from "../services/tracks";
-import { useAuthSelector } from "../store/slices/auth";
+import { SceletonCard } from "../../components/Track/sceleton";
+import { TrackPage } from "../../components/Track/track";
+import * as S from "../../components/TrackList/trackList.style";
+import { useGetAllMyTracksQuery } from "../../services/tracks";
+import { useAuthSelector } from "../../store/slices/auth";
 
 export function MyTrack({ setCurrentTrack }) {
   const auth = useAuthSelector();

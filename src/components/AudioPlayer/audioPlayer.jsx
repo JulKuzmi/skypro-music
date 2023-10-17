@@ -13,14 +13,13 @@ import * as S from "./audioPlayer.style";
 import { PlayerProgress } from "./playerProgress";
 import { Volume } from "./playerVolume";
 
-export function AudioPlayer() {
+export function AudioPlayer({ tracks }) {
   const [trackTime, setTrackTime] = useState({});
   const audioRef = useRef(null);
   const [isRepeat, setIsRepeat] = useState(false);
   const [shuffle, setShuffle] = useState(false);
 
   const dispatch = useDispatch();
-  const playlist = useSelector((state) => state.track.newPlaylist);
   const currentTrack = useSelector((state) => state.track.trackId);
   const isShuffle = useSelector((state) => state.track.shufflePlaylist);
   const isPlayingTracks = useSelector((state) => state.track.playTrack);
@@ -47,10 +46,10 @@ export function AudioPlayer() {
 
     return `${minutes}:${seconds}`;
   }
-  const trackList = shuffle ? isShuffle : playlist;
-
+  const trackList = shuffle ? isShuffle : tracks;
   const handleNext = () => {
-    let index = trackList.findIndex((item) => item.id === currentTrack.id);
+    console.log(isShuffle);
+    let index = trackList.findIndex((item) => item?.id === currentTrack.id);
     if (+index === trackList.length - 1) return;
     index = +index + 1;
 
@@ -59,7 +58,7 @@ export function AudioPlayer() {
         id: trackList[index].id,
         author: trackList[index].author,
         name: trackList[index].name,
-        trackFile: trackList[index].track_file,
+        track_file: trackList[index].track_file,
         progress: 0,
         length: trackList[index].duration_in_seconds,
         staredUser: trackList[index].stared_user,
@@ -68,6 +67,7 @@ export function AudioPlayer() {
   };
 
   const handlePrev = () => {
+    const trackList = shuffle ? [isShuffle] : tracks;
     if (audioRef.current?.currentTime > 5) {
       audioRef.current.currentTime = 0;
       return;
@@ -81,7 +81,7 @@ export function AudioPlayer() {
         id: trackList[index].id,
         author: trackList[index].author,
         title: trackList[index].name,
-        trackFile: trackList[index].track_file,
+        track_file: trackList[index].track_file,
         progress: 0,
         length: trackList[index].duration_in_seconds,
         staredUser: trackList[index].stared_user,
@@ -94,11 +94,12 @@ export function AudioPlayer() {
       setShuffle(false);
       dispatch(setShuffleTracks([]));
     } else {
-      const shuffleTracks = [...playlist].sort(function () {
+      const shuffleTracks = [...tracks].sort(function () {
         return Math.round(Math.random()) - 0.5;
       });
+
       setShuffle(true);
-      dispatch(setShuffleTracks([...shuffleTracks]));
+      dispatch(setShuffleTracks(shuffleTracks));
     }
   };
 
@@ -119,8 +120,8 @@ export function AudioPlayer() {
     }
   };
   let auth = JSON.parse(localStorage.getItem("user"));
-  const [like, { likeError }] = useLikeTrackMutation();
-  const [dislike, { dislikeError }] = useDislikeTrackMutation();
+  const [like] = useLikeTrackMutation();
+  const [dislike] = useDislikeTrackMutation();
   const [isLike, setIsLike] = useState(auth);
 
   useEffect(() => {
