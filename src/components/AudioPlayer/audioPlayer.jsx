@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  useDislikeTrackMutation,
+  useLikeTrackMutation,
+} from "../../services/tracks";
+import {
   setShuffleTracks,
   setPlayTracks,
   setCurrentTracks,
@@ -93,7 +97,7 @@ export function AudioPlayer({ tracks }) {
       const shuffleTracks = [...tracks].sort(function () {
         return Math.round(Math.random()) - 0.5;
       });
-      console.log(shuffleTracks);
+
       setShuffle(true);
       dispatch(setShuffleTracks(shuffleTracks));
     }
@@ -115,8 +119,30 @@ export function AudioPlayer({ tracks }) {
       dispatch(setPlayTracks(!isPlayingTracks));
     }
   };
+  let auth = JSON.parse(localStorage.getItem("user"));
+  const [like] = useLikeTrackMutation();
+  const [dislike] = useDislikeTrackMutation();
+  const [isLike, setIsLike] = useState(auth);
 
-  useEffect(() => {}, [currentTrack]);
+  useEffect(() => {
+    setIsLike(auth);
+  }, [currentTrack]);
+
+  const handleLike = async () => {
+    setIsLike(true);
+    await like({
+      id: currentTrack.id,
+    }).unwrap();
+    dispatch(setCurrentTracks(currentTrack));
+  };
+
+  const handleDislike = async () => {
+    setIsLike(false);
+    await dislike({
+      id: currentTrack.id,
+    }).unwrap();
+    dispatch(setCurrentTracks(currentTrack));
+  };
 
   return (
     <>
@@ -211,6 +237,28 @@ export function AudioPlayer({ tracks }) {
                         </S.TrackPlayAlbumLink>
                       </S.TrackPlayAlbum>
                     </S.TrackPlayContain>
+
+                    <S.TrackPlayLike>
+                      {isLike ? (
+                        <S.TrackPlayLikeBtn>
+                          <S.TrackPlayLikeSvg
+                            alt="like"
+                            onClick={() => handleLike(currentTrack.id)}
+                          >
+                            <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+                          </S.TrackPlayLikeSvg>
+                        </S.TrackPlayLikeBtn>
+                      ) : (
+                        <S.TrackPlayDislike>
+                          <S.TrackPlayDislikeSvg
+                            alt="dislike"
+                            onClick={() => handleDislike(currentTrack.id)}
+                          >
+                            <use xlinkHref="img/icon/sprite.svg#icon-dislike"></use>
+                          </S.TrackPlayDislikeSvg>
+                        </S.TrackPlayDislike>
+                      )}
+                    </S.TrackPlayLike>
                   </S.PlayerTrackPlay>
                 </S.BarPlayer>
                 <Volume audioRef={audioRef} />

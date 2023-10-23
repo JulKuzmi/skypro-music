@@ -1,5 +1,9 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  useDislikeTrackMutation,
+  useLikeTrackMutation,
+} from "../../services/tracks";
 import { setCurrentTracks, setNewTracks } from "../../store/slices/reducers";
 import * as S from "./sceleton.style";
 
@@ -34,6 +38,40 @@ export const TrackPage = ({ song }) => {
     );
     dispatch(setNewTracks(song));
   };
+  const [like] = useLikeTrackMutation();
+  const [dislike] = useDislikeTrackMutation();
+  const auth = JSON.parse(localStorage.getItem("user"));
+  const authUser = Boolean(song.stared_user.find(({ id }) => id === auth.id));
+  const [isLiked, setIsLiked] = useState(authUser);
+
+  useEffect(() => {
+    setIsLiked(authUser);
+  }, [authUser]);
+
+  const handleLike = async (id) => {
+    setIsLiked(true);
+    await like({ id }).unwrap();
+    dispatch(
+      setCurrentTracks({
+        id: id,
+      })
+    );
+    dispatch(setNewTracks(song));
+  };
+
+  const handleDislike = async (id) => {
+    setIsLiked(false);
+    await dislike({ id }).unwrap();
+    dispatch(
+      setCurrentTracks({
+        id: id,
+      })
+    );
+    dispatch(setNewTracks(song));
+  };
+
+  const toggleLikeDislike = (id) =>
+    isLiked ? handleDislike(id) : handleLike(id);
 
   return (
     <S.PlaylistItem
@@ -72,7 +110,21 @@ export const TrackPage = ({ song }) => {
           <S.TrackAlbumLink href="http://">{song.album}</S.TrackAlbumLink>
         </S.TrackAlbum>
         <S.TrackTime>
-          <S.TrackTimeSvg alt="like" onClick={() => {}}></S.TrackTimeSvg>
+          <S.TrackTimeSvg
+            alt="like"
+            onClick={() => {
+              toggleLikeDislike(song.id);
+            }}
+          >
+            {isLiked ? (
+              <use
+                xlinkHref="img/icon/sprite.svg#icon-like"
+                fill="#B672FF"
+              ></use>
+            ) : (
+              <use xlinkHref="img/icon/sprite.svg#icon-like"></use>
+            )}
+          </S.TrackTimeSvg>
           <S.TrackTimeText>
             {formatTime(Math.floor((song.duration_in_seconds % 3600) / 60))}:
             {formatTime(Math.floor((song.duration_in_seconds % 3600) % 60))}

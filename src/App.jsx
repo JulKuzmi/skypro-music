@@ -19,7 +19,6 @@ function App() {
     setUser(JSON.parse(localStorage.getItem("user")));
     getPlaylist()
       .then((tracks) => {
-        console.log(tracks);
         setPosts(tracks);
         dispatch(setNewTracks(tracks));
       })
