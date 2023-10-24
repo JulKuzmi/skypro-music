@@ -97,7 +97,6 @@ export function AudioPlayer({ tracks }) {
       const shuffleTracks = [...tracks].sort(function () {
         return Math.round(Math.random()) - 0.5;
       });
-
       setShuffle(true);
       dispatch(setShuffleTracks(shuffleTracks));
     }

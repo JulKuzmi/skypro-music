@@ -5,17 +5,14 @@ import { Main } from "./components/Main/Main";
 import { ProtectedRoute } from "./components/protector-route";
 import { NotFound } from "./pages/notFound";
 import { MyPlaylist } from "./pages/myPlaylist/myPlaylist";
-import { Collection } from "./pages/category/collection";
+// import { Collection } from "./pages/category/collection";
+import { Category } from "./pages/category/category";
 
 export const AppRoutes = ({
   isLoading,
-  tracks,
-  isOpen,
-  setIsOpen,
   currentTrack,
   setCurrentTrack,
-  trackTime,
-  setTrackTime,
+  tracks,
 }) => {
   return (
     <Routes>
@@ -31,18 +28,26 @@ export const AppRoutes = ({
           element={
             <Main
               isLoading={isLoading}
-              tracks={tracks}
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              currentTrack={currentTrack}
               setCurrentTrack={setCurrentTrack}
-              trackTime={trackTime}
-              setTrackTime={setTrackTime}
+              tracks={tracks}
             />
           }
         />
-        <Route path="/myplaylist" element={<MyPlaylist />} />
-        <Route path="/collection/:id" element={<Collection />} />
+        <Route
+          path="/myplaylist"
+          element={<MyPlaylist setCurrentTrack={setCurrentTrack} />}
+        />
+        <Route
+          path="/item/:id"
+          element={
+            <Category
+              isLoading={isLoading}
+              currentTrack={currentTrack}
+              setCurrentTrack={setCurrentTrack}
+              tracks={tracks}
+            />
+          }
+        />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
